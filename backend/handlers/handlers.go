@@ -11,6 +11,7 @@ import (
 
 	"auth-system/models"
 	"auth-system/security"
+	"auth-system/config"
 
 	"golang.org/x/time/rate"
 )
@@ -77,7 +78,7 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 
 func CORSMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		AllowedOrigin := os.Getenv("ALLOWED_ORIGIN")
+		allowedOrigin := config.GetAllowedOrigin()
 		w.Header().Set("Access-Control-Allow-Origin", AllowedOrigin)
 		w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
