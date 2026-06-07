@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { House } from "lucide-react";
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL;
 export default function Login() {
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -21,8 +21,8 @@ export default function Login() {
         body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || "Authentication failed.");
+      if (!res.ok || !data.success || !API_URL) {
+        throw new Error(data.message || "Authentication failed." || "CRITICAL ERROR: VITE_API_BASE_URL environment variable is not defined!");
       }
       // Set session variable flag to allow access to dashboard state
       localStorage.setItem("isAuthenticated", "true");

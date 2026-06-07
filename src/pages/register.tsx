@@ -1,7 +1,7 @@
 import { House } from 'lucide-react';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8080';
+const API_URL = import.meta.env.VITE_API_URL;
 export default function Register() {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
@@ -58,8 +58,8 @@ export default function Register() {
         body: JSON.stringify({ username, email, password }),
       });
       const data = await res.json();
-      if (!res.ok || !data.success) {
-        throw new Error(data.message || 'Registration failed.');
+      if (!res.ok || !data.success || !API_URL) {
+        throw new Error(data.message || 'Registration failed.' || "CRITICAL ERROR: VITE_API_BASE_URL environment variable is not defined!");
       }
       setSuccess('Account provisioned successfully. Redirecting...');
       setTimeout(() => navigate('/login'), 2000);
